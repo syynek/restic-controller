@@ -26,10 +26,10 @@ type Repository struct {
 		IncludeFiles []string `mapstructure:"include_files" validate:"required"`
 		ExcludeFiles []string `mapstructure:"exclude_files" validate:"required"`
 	} `mapstructure:"backup" validate:"required"`
-	Check struct {
+	IntegrityCheck struct {
 		Schedule     string `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool   `mapstructure:"run_on_startup"`
-	} `mapstructure:"check" validate:"required"`
+	} `mapstructure:"integrity_check" validate:"required"`
 	Retention struct {
 		Schedule     string        `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool          `mapstructure:"run_on_startup"`

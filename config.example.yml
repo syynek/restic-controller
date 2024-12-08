@@ -28,7 +28,7 @@ repositories:
           - "test4"
 
       # Check configuration
-      check:
+      integrity_check:
         # Cron formatted schedule
         schedule: "* * * * *"
 

@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
 	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/controller"
 )
 
 func main() {
@@ -18,7 +20,13 @@ func main() {
 	}
 
 	reloadLogConfig(appConfig)
-	addFileWatcher(configFile)
+
+	backupController := controller.NewBackupController(appConfig.Repositories)
+	backupController.StartSchedule()
+
+	controllers := []controller.ControllerInterface{backupController}
+
+	addFileWatcher(configFile, controllers)
 }
 
 func getConfig(configFile *string) (*config.AppConfig, error) {
@@ -37,7 +45,7 @@ func reloadLogConfig(appConfig *config.AppConfig) {
 	}
 }
 
-func addFileWatcher(configFile *string) {
+func addFileWatcher(configFile *string, controllers []controller.ControllerInterface) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.WithField("err", err).Fatal("Failed to add file watcher")
@@ -53,6 +61,7 @@ func addFileWatcher(configFile *string) {
 
 	done := make(chan bool)
 	go func() {
+		var lastEventTime time.Time
 		for {
 			select {
 			case event, ok := <-watcher.Events:
@@ -60,20 +69,26 @@ func addFileWatcher(configFile *string) {
 					return
 				}
 
-				log.Debugf("Event: %s", event)
+				if event.Op&fsnotify.Write != fsnotify.Write {
+					continue
+				}
 
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					log.Debugf("File modified: %s", event.Name)
+				now := time.Now()
+				if now.Sub(lastEventTime) < 100*time.Millisecond {
+					continue
 				}
-				if event.Op&fsnotify.Remove == fsnotify.Remove {
-					log.Debugf("File removed: %s", event.Name)
+				lastEventTime = now
+
+				log.Debugf("File modified: %s", event.Name)
+
+				time.Sleep(100 * time.Millisecond)
+
+				appConfig, err := getConfig(configFile)
+				if err != nil {
+					log.WithField("err", err).Fatal("Failed to load configuration")
 				}
-				if event.Op&fsnotify.Rename == fsnotify.Rename {
-					log.Debugf("File renamed: %s", event.Name)
-				}
-				if event.Op&fsnotify.Chmod == fsnotify.Chmod {
-					log.Debugf("File permissions changed: %s", event.Name)
-				}
+
+				updateControllers(controllers, appConfig.Repositories)
 
 			case err, ok := <-watcher.Errors:
 				if !ok {
@@ -85,4 +100,10 @@ func addFileWatcher(configFile *string) {
 	}()
 
 	<-done
+}
+
+func updateControllers(controllers []controller.ControllerInterface, repositories []*config.Repository) {
+	for _, controllerInstance := range controllers {
+		controllerInstance.UpdateRepositories(repositories)
+	}
 }
