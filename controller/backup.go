@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/restic"
 )
 
 type BackupController struct {
@@ -48,6 +49,10 @@ func (controller *BackupController) StartSchedule() error {
 func (controller *BackupController) RunTask(repository *config.Repository) func() {
 	return func() {
 		controller.logger.WithField("repository", repository.Name).Info("Running backup")
+		success, err := restic.RunBackup(repository)
+		if success {
+			controller.logger.WithField("repository", repository.Name).Info("Backup finished")
+		}
 	}
 }
 
