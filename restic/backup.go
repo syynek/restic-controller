@@ -6,8 +6,9 @@ import (
 
 func RunBackup(repository *config.Repository) (bool, error) {
 	args := []string{}
-	args = append(args, "--exclude")
-	args = append(args, repository.Backup.ExcludeFiles...)
+	for _, file := range repository.Backup.ExcludeFiles {
+		args = append(args, "-e", file)
+	}
 	args = append(args, "backup")
 	args = append(args, repository.Backup.IncludeFiles...)
 

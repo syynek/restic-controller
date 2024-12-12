@@ -50,6 +50,11 @@ func (controller *BackupController) RunTask(repository *config.Repository) func(
 	return func() {
 		controller.logger.WithField("repository", repository.Name).Info("Running backup")
 		success, err := restic.RunBackup(repository)
+
+		if err != nil {
+			controller.logger.WithField("repository", repository.Name).Error(err)
+		}
+
 		if success {
 			controller.logger.WithField("repository", repository.Name).Info("Backup finished")
 		}

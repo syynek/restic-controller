@@ -14,16 +14,6 @@ import (
 // Making possible to mock exec.CommandContext
 var execCommandContext = exec.CommandContext
 
-func buildCmdEnv(repositoryPassword string, env *map[string]string) []string {
-	var cmdEnv []string
-	cmdEnv = append(cmdEnv, "RESTIC_PASSWORD="+repositoryPassword)
-	for k, v := range *env {
-		cmdEnv = append(cmdEnv, fmt.Sprintf("%s=%s", k, v))
-	}
-
-	return cmdEnv
-}
-
 func runRestic(repository *config.Repository, args []string) (bool, error) {
 	ctx := context.TODO()
 
@@ -58,7 +48,7 @@ func getRepositoryPassword(repository *config.Repository) (string, error) {
 	if repository.PasswordFile != "" {
 		password, err := os.ReadFile(repository.PasswordFile)
 		if err != nil {
-			log.WithFields(log.Fields{"err": err, "repository": repository.Name}).Warning("Failed to read password file")
+			log.WithFields(log.Fields{"err": err, "repository": repository.Name}).Error("Failed to read password file")
 			return "", err
 		}
 		return string(password), nil
