@@ -14,13 +14,14 @@ type ForgetPolicy struct {
 
 // Repository contains the configuration for a restic repository
 type Repository struct {
-	Name         string            `mapstructure:"name" validate:"required"`
-	URL          string            `mapstructure:"url" validate:"required"`
-	Password     string            `mapstructure:"password" validate:"required_without=PasswordFile"`
-	PasswordFile string            `mapstructure:"password_file" validate:"required_without=Password"`
-	EnvFromFile  map[string]string `mapstructure:"env_from_file"`
-	Env          map[string]string `mapstructure:"env"`
-	Backup       struct {
+	Name           string            `mapstructure:"name" validate:"required"`
+	URL            string            `mapstructure:"url" validate:"required"`
+	Password       string            `mapstructure:"password" validate:"required_without=PasswordFile"`
+	PasswordFile   string            `mapstructure:"password_file" validate:"required_without=Password"`
+	EnvFromFile    map[string]string `mapstructure:"env_from_file"`
+	Env            map[string]string `mapstructure:"env"`
+	AutoInitialize bool              `mapstructure:"auto_initialize"`
+	Backup         struct {
 		Schedule     string   `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool     `mapstructure:"run_on_startup"`
 		IncludeFiles []string `mapstructure:"include_files" validate:"required"`

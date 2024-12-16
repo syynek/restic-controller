@@ -24,7 +24,7 @@ func NewBackupController(repositories []*config.Repository) *BackupController {
 	}
 }
 
-func (controller *BackupController) StartSchedule() error {
+func (controller *BackupController) Start() error {
 	for _, repository := range controller.repositories {
 		if repository.Backup.Schedule == "" {
 			continue
@@ -64,7 +64,7 @@ func (controller *BackupController) RunTask(repository *config.Repository) func(
 func (controller *BackupController) UpdateRepositories(repositories []*config.Repository) {
 	controller.ClearSchedule()
 	controller.repositories = repositories
-	controller.StartSchedule()
+	controller.Start()
 }
 
 func (controller *BackupController) ClearSchedule() {

@@ -56,3 +56,27 @@ func getRepositoryPassword(repository *config.Repository) (string, error) {
 
 	return "", nil
 }
+
+func IsFolderRepository(path string) bool {
+	repositoryStructure := map[string]string{
+		"data":      "folder",
+		"index":     "folder",
+		"keys":      "folder",
+		"locks":     "folder",
+		"snapshots": "folder",
+
+		"config": "file",
+	}
+
+	for objectName, objectType := range repositoryStructure {
+		info, err := os.Stat(path + "/" + objectName)
+		if os.IsNotExist(err) {
+			return false
+		}
+		if objectType == "folder" && !info.IsDir() {
+			return false
+		}
+	}
+
+	return true
+}

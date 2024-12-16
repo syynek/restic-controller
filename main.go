@@ -21,10 +21,13 @@ func main() {
 
 	reloadLogConfig(appConfig)
 
-	backupController := controller.NewBackupController(appConfig.Repositories)
-	backupController.StartSchedule()
+	initializationController := controller.NewInitializationController(appConfig.Repositories)
+	initializationController.Start()
 
-	controllers := []controller.ControllerInterface{backupController}
+	backupController := controller.NewBackupController(appConfig.Repositories)
+	backupController.Start()
+
+	controllers := []controller.ControllerInterface{initializationController, backupController}
 
 	addFileWatcher(configFile, controllers)
 }

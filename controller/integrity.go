@@ -23,7 +23,7 @@ func NewIntegrityController(repositories []*config.Repository) *IntegrityControl
 	}
 }
 
-func (controller *IntegrityController) StartSchedule() error {
+func (controller *IntegrityController) Start() error {
 	for _, repository := range controller.repositories {
 		if repository.IntegrityCheck.Schedule == "" {
 			continue
@@ -54,7 +54,7 @@ func (controller *IntegrityController) RunTask(repository *config.Repository) fu
 func (controller *IntegrityController) UpdateRepositories(repositories []*config.Repository) {
 	controller.ClearSchedule()
 	controller.repositories = repositories
-	controller.StartSchedule()
+	controller.Start()
 }
 
 func (controller *IntegrityController) ClearSchedule() {

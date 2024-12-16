@@ -23,7 +23,7 @@ func NewRetentionController(repositories []*config.Repository) *RetentionControl
 	}
 }
 
-func (controller *RetentionController) StartSchedule() error {
+func (controller *RetentionController) Start() error {
 	for _, repository := range controller.repositories {
 		if repository.Retention.Schedule == "" {
 			continue
@@ -54,7 +54,7 @@ func (controller *RetentionController) RunTask(repository *config.Repository) fu
 func (controller *RetentionController) UpdateRepositories(repositories []*config.Repository) {
 	controller.ClearSchedule()
 	controller.repositories = repositories
-	controller.StartSchedule()
+	controller.Start()
 }
 
 func (controller *RetentionController) ClearSchedule() {
