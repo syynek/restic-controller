@@ -27,7 +27,13 @@ func main() {
 	backupController := controller.NewBackupController(appConfig.Repositories)
 	backupController.Start()
 
-	controllers := []controller.ControllerInterface{initializationController, backupController}
+	integrityController := controller.NewIntegrityController(appConfig.Repositories)
+	integrityController.Start()
+
+	retentionController := controller.NewRetentionController(appConfig.Repositories)
+	retentionController.Start()
+
+	controllers := []controller.ControllerInterface{initializationController, backupController, integrityController, retentionController}
 
 	addFileWatcher(configFile, controllers)
 }

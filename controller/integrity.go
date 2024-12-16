@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/restic"
 )
 
 type IntegrityController struct {
@@ -48,6 +49,15 @@ func (controller *IntegrityController) Start() error {
 func (controller *IntegrityController) RunTask(repository *config.Repository) func() {
 	return func() {
 		controller.logger.WithField("repository", repository.Name).Info("Running integrity check")
+		success, err := restic.RunIntegrityCheck(repository)
+
+		if err != nil {
+			controller.logger.WithField("repository", repository.Name).Error(err)
+		}
+
+		if success {
+			controller.logger.WithField("repository", repository.Name).Info("Integrity check finished")
+		}
 	}
 }
 
