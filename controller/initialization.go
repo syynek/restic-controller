@@ -34,10 +34,17 @@ func (controller *InitializationController) Start() error {
 func (controller *InitializationController) RunTask(repository *config.Repository) func() {
 	return func() {
 		controller.logger.WithField("repository", repository.Name).Info("Running auto initialization")
+
+		if !restic.IsURLPath(repository.URL) {
+			controller.logger.WithField("repository", repository.Name).Warn("Repository is not local")
+			return
+		}
+
 		if restic.IsFolderRepository(repository.URL) {
 			controller.logger.WithField("repository", repository.Name).Debug("Repository already exists")
 			return
 		}
+
 		success, err := restic.RunInit(repository)
 
 		if err != nil {

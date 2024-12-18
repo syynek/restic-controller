@@ -14,6 +14,8 @@ import (
 // Making possible to mock exec.CommandContext
 var execCommandContext = exec.CommandContext
 
+// runRestic runs restic commands and adds the repository
+// password to the environment variables of a newly created context
 func runRestic(repository *config.Repository, args []string) (bool, error) {
 	ctx := context.TODO()
 
@@ -41,10 +43,14 @@ func runRestic(repository *config.Repository, args []string) (bool, error) {
 	return true, nil
 }
 
+// getRepositoryPassword returns the password of a repository
+// by checking the password field in the config or reading
+// the contents of a specified password file
 func getRepositoryPassword(repository *config.Repository) (string, error) {
 	if repository.Password != "" {
 		return repository.Password, nil
 	}
+
 	if repository.PasswordFile != "" {
 		password, err := os.ReadFile(repository.PasswordFile)
 		if err != nil {
@@ -57,6 +63,8 @@ func getRepositoryPassword(repository *config.Repository) (string, error) {
 	return "", nil
 }
 
+// IsFolderRepository returns a boolean indicating
+// if the folder has the structure of a restic repository
 func IsFolderRepository(path string) bool {
 	repositoryStructure := map[string]string{
 		"data":      "folder",
@@ -76,6 +84,43 @@ func IsFolderRepository(path string) bool {
 		if objectType == "folder" && !info.IsDir() {
 			return false
 		}
+	}
+
+	return true
+}
+
+// IsURLPath is a modified version of the location.isPath function
+// to check if a string a path from the restic repository,
+// origin: https://github.com/restic/restic/blob/master/internal/backend/location/location.go
+func IsURLPath(s string) bool {
+	if strings.HasPrefix(s, "../") || strings.HasPrefix(s, `..\`) {
+		return true
+	}
+
+	if strings.HasPrefix(s, "./") || strings.HasPrefix(s, `.\`) {
+		return true
+	}
+
+	if strings.HasPrefix(s, "/") || strings.HasPrefix(s, `\`) {
+		return true
+	}
+
+	if len(s) < 3 {
+		return false
+	}
+
+	// check for drive paths
+	drive := s[0]
+	if !(drive >= 'a' && drive <= 'z') && !(drive >= 'A' && drive <= 'Z') {
+		return false
+	}
+
+	if s[1] != ':' {
+		return false
+	}
+
+	if s[2] != '\\' && s[2] != '/' {
+		return false
 	}
 
 	return true
