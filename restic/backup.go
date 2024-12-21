@@ -4,6 +4,7 @@ import (
 	"github.com/syynek/restic-controller/config"
 )
 
+// RunBackup prepares the restic backup command and returns the result
 func RunBackup(repository *config.Repository) (bool, error) {
 	args := []string{}
 	for _, file := range repository.Backup.ExcludeFiles {

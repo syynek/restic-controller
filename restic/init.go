@@ -4,6 +4,7 @@ import (
 	"github.com/syynek/restic-controller/config"
 )
 
+// RunInit prepares the restic init command and returns the result
 func RunInit(repository *config.Repository) (bool, error) {
 	args := []string{}
 	args = append(args, "init", "-r", repository.URL)

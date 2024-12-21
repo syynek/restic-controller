@@ -6,6 +6,7 @@ import (
 	"github.com/syynek/restic-controller/config"
 )
 
+// RunForget prepares the restic forget command and returns the result
 func RunForget(repository *config.Repository) (bool, error) {
 	args := []string{}
 	args = append(args, "forget", "--prune", "--json", "-q")
@@ -16,6 +17,7 @@ func RunForget(repository *config.Repository) (bool, error) {
 	return success, err
 }
 
+// getForgetPolicyArgs returns an array with the forget policy for the restic forget command
 func getForgetPolicyArgs(policy *config.ForgetPolicy) []string {
 	var args []string
 
