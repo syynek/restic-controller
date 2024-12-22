@@ -4,56 +4,56 @@ log:
 
 # Repositories configuration
 repositories:
-    # Name of your repository
-    - name: "local"
-      # Restic repository URL
-      url: "./repository"
-      # Restic repository password
-      password: "password"
+  # Name of your repository
+  - name: "local"
+    # Restic repository URL
+    url: "./repository"
+    # Restic repository password
+    password: "password"
 
-      # Backup configuration
-      backup:
-        # Cron formatted schedule
-        schedule: "* * * * *"
+    # Backup configuration
+    backup:
+      # Cron formatted schedule
+      schedule: "* * * * *"
 
-        # Run the backup on startup (defaults to false)
-        # run_on_startup: false
+      # Run the backup on startup (defaults to false)
+      # run_on_startup: false
 
-        include_files:
-          - "test1"
-          - "test2"
+      include_files:
+        - "test1"
+        - "test2"
         
-        exclude_files:
-          - "test3"
-          - "test4"
+      exclude_files:
+        - "test3"
+        - "test4"
 
-      # Check configuration
-      integrity_check:
-        # Cron formatted schedule
-        schedule: "* * * * *"
+    # Check configuration
+    integrity_check:
+      # Cron formatted schedule
+      schedule: "* * * * *"
 
-        # Run the check on startup (defaults to false)
-        # run_on_startup: false
+      # Run the check on startup (defaults to false)
+      # run_on_startup: false
 
-      retention:
-        # Cron formatted schedule
-        schedule: "* * * * *"
+    retention:
+      # Cron formatted schedule
+      schedule: "* * * * *"
 
-        # Run the retention on startup (defaults to false)
-        # run_on_startup: false
+      # Run the retention on startup (defaults to false)
+      # run_on_startup: false
 
-        # Retention policy, see restic docs for details
-        policy:
-          keep_last: 1
-          # keep_daily: 3
-          # keep_hourly: 1
-          # keep_weekly: 1
-          # keep_monthly: 1
-          # keep_yearly: 1
+      # Retention policy, see restic docs for details
+      policy:
+        keep_last: 1
+        # keep_daily: 3
+        # keep_hourly: 1
+        # keep_weekly: 1
+        # keep_monthly: 1
+        # keep_yearly: 1
 
-          # Keep snapshots with tag1 OR tag2
-          # keep_tags: ["tag1", "tag2"]
-          # Keep snapshots with tag1 AND tag2
-          # keep_tags: ["tag1,tag2"]
+        # Keep snapshots with tag1 OR tag2
+        # keep_tags: ["tag1", "tag2"]
+        # Keep snapshots with tag1 AND tag2
+        # keep_tags: ["tag1,tag2"]
 
-          # keep_within: "3y1m2d"
+        # keep_within: "3y1m2d"

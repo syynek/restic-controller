@@ -1,6 +1,6 @@
 services:
-  controller:
-    image: restic-controller:latest
+  restic-controller:
+    image: ghcr.io/syynek/restic-controller:latest
     volumes:
       - "./config.yml:/app/config.yml"
-      - "../backups:/repositories"
+      - "./backups:/repositories"
