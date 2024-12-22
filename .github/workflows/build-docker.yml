@@ -33,7 +33,7 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:latest
       - 
         name: Build and push Docker image
-        if: ${{ github.ref_type == "tag" }}
+        if: ${{ github.ref_type == 'tag' }}
         uses: docker/build-push-action@v6
         with:
           context: .
