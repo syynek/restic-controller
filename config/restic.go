@@ -25,15 +25,15 @@ type Repository struct {
 		Schedule     string   `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool     `mapstructure:"run_on_startup"`
 		IncludeFiles []string `mapstructure:"include_files" validate:"required"`
-		ExcludeFiles []string `mapstructure:"exclude_files" validate:"required"`
-	} `mapstructure:"backup" validate:"required"`
+		ExcludeFiles []string `mapstructure:"exclude_files"`
+	} `mapstructure:"backup" validate:"required_without=IntegrityCheck Retention"`
 	IntegrityCheck struct {
 		Schedule     string `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool   `mapstructure:"run_on_startup"`
-	} `mapstructure:"integrity_check" validate:"required"`
+	} `mapstructure:"integrity_check" validate:"required_without=Backup Retention"`
 	Retention struct {
 		Schedule     string        `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool          `mapstructure:"run_on_startup"`
 		Policy       *ForgetPolicy `mapstructure:"policy" validate:"required"`
-	} `mapstructure:"retention" validate:"required"`
+	} `mapstructure:"retention" validate:"required_without=Backup IntegrityCheck"`
 }
