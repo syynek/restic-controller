@@ -26,14 +26,14 @@ type Repository struct {
 		RunOnStartup bool     `mapstructure:"run_on_startup"`
 		IncludeFiles []string `mapstructure:"include_files" validate:"required"`
 		ExcludeFiles []string `mapstructure:"exclude_files"`
-	} `mapstructure:"backup" validate:"required_without=IntegrityCheck Retention"`
+	} `mapstructure:"backup" validate:"required_without_all=IntegrityCheck Retention"`
 	IntegrityCheck struct {
 		Schedule     string `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool   `mapstructure:"run_on_startup"`
-	} `mapstructure:"integrity_check" validate:"required_without=Backup Retention"`
+	} `mapstructure:"integrity_check" validate:"required_without_all=Backup Retention"`
 	Retention struct {
 		Schedule     string        `mapstructure:"schedule" validate:"required"`
 		RunOnStartup bool          `mapstructure:"run_on_startup"`
 		Policy       *ForgetPolicy `mapstructure:"policy" validate:"required"`
-	} `mapstructure:"retention" validate:"required_without=Backup IntegrityCheck"`
+	} `mapstructure:"retention" validate:"required_without_all=Backup IntegrityCheck"`
 }
