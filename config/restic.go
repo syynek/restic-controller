@@ -22,18 +22,18 @@ type Repository struct {
 	Env            map[string]string `mapstructure:"env"`
 	AutoInitialize bool              `mapstructure:"auto_initialize"`
 	Backup         struct {
-		Schedule     string   `mapstructure:"schedule" validate:"required"`
+		Schedule     string   `mapstructure:"schedule" validate:"required_with=Backup"`
 		RunOnStartup bool     `mapstructure:"run_on_startup"`
-		IncludeFiles []string `mapstructure:"include_files" validate:"required"`
+		IncludeFiles []string `mapstructure:"include_files" validate:"required_with=Backup"`
 		ExcludeFiles []string `mapstructure:"exclude_files"`
 	} `mapstructure:"backup" validate:"required_without_all=IntegrityCheck Retention"`
 	IntegrityCheck struct {
-		Schedule     string `mapstructure:"schedule" validate:"required"`
+		Schedule     string `mapstructure:"schedule" validate:"required_with=IntegrityCheck"`
 		RunOnStartup bool   `mapstructure:"run_on_startup"`
 	} `mapstructure:"integrity_check" validate:"required_without_all=Backup Retention"`
 	Retention struct {
-		Schedule     string        `mapstructure:"schedule" validate:"required"`
+		Schedule     string        `mapstructure:"schedule" validate:"required_with=Retention"`
 		RunOnStartup bool          `mapstructure:"run_on_startup"`
-		Policy       *ForgetPolicy `mapstructure:"policy" validate:"required"`
+		Policy       *ForgetPolicy `mapstructure:"policy" validate:"required_with=Retention"`
 	} `mapstructure:"retention" validate:"required_without_all=Backup IntegrityCheck"`
 }
