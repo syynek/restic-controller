@@ -12,11 +12,12 @@ COPY go.sum .
 RUN go mod download
 
 COPY . .
-RUN go build -o bin/restic-controller .
+RUN go build -o bin/restic-controller ./cmd/restic-controller
 
 
 FROM restic/restic:0.17.3
 
+RUN apk add rsync
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=builder /app/bin/restic-controller .

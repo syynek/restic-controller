@@ -36,4 +36,11 @@ type Repository struct {
 		RunOnStartup bool          `mapstructure:"run_on_startup"`
 		Policy       *ForgetPolicy `mapstructure:"policy" validate:"required_with=Retention"`
 	} `mapstructure:"retention" validate:"required_without_all=Backup IntegrityCheck"`
+	Rsync struct {
+		Schedule     string `mapstructure:"schedule" validate:"required_with=Rsync"`
+		User         string `mapstructure:"user" validate:"required_with=Rsync"`
+		Host         string `mapstructure:"host" validate:"required_with=Rsync"`
+		TargetFolder string `mapstructure:"target_folder" validate:"required_with=Rsync"`
+		Port         int    `mapstructure:"port" validate:"required_with=Rsync"`
+	} `mapstructure:"rsync"`
 }

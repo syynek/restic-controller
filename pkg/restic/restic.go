@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // Making possible to mock exec.CommandContext

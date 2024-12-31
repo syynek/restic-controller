@@ -1,7 +1,7 @@
 package restic
 
 import (
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // RunIntegrityCheck prepares the restic check command and returns the result

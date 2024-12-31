@@ -6,8 +6,8 @@ import (
 
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
-	"github.com/syynek/restic-controller/config"
-	"github.com/syynek/restic-controller/restic"
+	"github.com/syynek/restic-controller/internal/config"
+	"github.com/syynek/restic-controller/pkg/restic"
 )
 
 type RetentionController struct {

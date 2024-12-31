@@ -1,7 +1,7 @@
 package restic
 
 import (
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // RunInit prepares the restic init command and returns the result

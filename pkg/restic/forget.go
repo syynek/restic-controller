@@ -3,7 +3,7 @@ package restic
 import (
 	"strconv"
 
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // RunForget prepares the restic forget command and returns the result

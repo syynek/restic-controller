@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // ControllerInterface the default interface for all controllers

@@ -1,7 +1,7 @@
 package restic
 
 import (
-	"github.com/syynek/restic-controller/config"
+	"github.com/syynek/restic-controller/internal/config"
 )
 
 // RunBackup prepares the restic backup command and returns the result

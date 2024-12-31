@@ -6,8 +6,8 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	log "github.com/sirupsen/logrus"
-	"github.com/syynek/restic-controller/config"
-	"github.com/syynek/restic-controller/controller"
+	"github.com/syynek/restic-controller/internal/config"
+	"github.com/syynek/restic-controller/pkg/controller"
 )
 
 func main() {
@@ -33,7 +33,10 @@ func main() {
 	retentionController := controller.NewRetentionController(appConfig.Repositories)
 	retentionController.Start()
 
-	controllers := []controller.ControllerInterface{initializationController, backupController, integrityController, retentionController}
+	rsyncController := controller.NewRsyncController(appConfig.Repositories)
+	rsyncController.Start()
+
+	controllers := []controller.ControllerInterface{initializationController, backupController, integrityController, retentionController, rsyncController}
 
 	addFileWatcher(configFile, controllers)
 }
