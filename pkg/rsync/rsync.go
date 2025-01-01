@@ -18,13 +18,13 @@ var execCommandContext = exec.CommandContext
 func RunRsync(repository *config.Repository) (bool, error) {
 	ctx := context.TODO()
 
-	args := []string{ // rsync -e 'ssh -p[port]' --recursive <local folder> <username>@<host>:<target folder>
-		"-e", "'ssh -p" + strconv.Itoa(repository.Rsync.Port) + "'",
+	// rsync -e ssh -p<port> --recursive <local folder> <username>@<host>:<target folder>
+	cmd := execCommandContext(ctx, "rsync",
+		"-v",
+		"-e", "ssh -p"+strconv.Itoa(repository.Rsync.Port),
 		"--recursive", repository.URL,
-		repository.Rsync.User + "@" + repository.Rsync.Host + ":" + repository.Rsync.TargetFolder,
-	}
-
-	cmd := execCommandContext(ctx, "rsync", args...)
+		repository.Rsync.User+"@"+repository.Rsync.Host+":"+repository.Rsync.TargetFolder,
+	)
 	cmd.Env = append(cmd.Env, os.Environ()...)
 
 	log.WithFields(log.Fields{"component": "rsync", "cmd": strings.Join(cmd.Args, " ")}).Debug("Running rsync command")
