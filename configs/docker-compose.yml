@@ -3,4 +3,7 @@ services:
     image: ghcr.io/syynek/restic-controller:latest
     volumes:
       - "./config.yml:/app/config.yml"
+      - "./backup-data:/data:ro"
       - "./backups:/repositories"
+      # Mount SSH keys and config to use Rsync
+      - "/root/.ssh:/root/.ssh:ro"
