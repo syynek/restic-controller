@@ -23,14 +23,18 @@ func runRestic(repository *config.Repository, args []string) (bool, error) {
 
 	cmd := execCommandContext(ctx, "restic", args...)
 	cmd.Env = append(cmd.Env, os.Environ()...)
+	for k, v := range repository.Env {
+		cmd.Env = append(cmd.Env, fmt.Sprintf("%s=%s", k, v))
+	}
 
 	password, err := getRepositoryPassword(repository)
 	if err != nil {
-
+		log.WithFields(log.Fields{"component": "restic", "repository": repository.Name}).Error("Invalid repository password")
+		return false, err
 	}
 	cmd.Env = append(cmd.Env, "RESTIC_PASSWORD="+password)
 
-	log.WithFields(log.Fields{"component": "restic", "cmd": strings.Join(cmd.Args, " ")}).Debug("Running restic command")
+	log.WithFields(log.Fields{"component": "restic", "repository": repository.Name, "cmd": strings.Join(cmd.Args, " ")}).Debug("Running restic command")
 
 	_, err = cmd.Output()
 	if err != nil {
